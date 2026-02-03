@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Curiosity Hook Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #f5576c;
+        }
+        
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .hooks-container {
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .hooks-container.show {
+            display: block;
+        }
+        
+        .hook-card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .hook-type {
+            font-size: 12px;
+            font-weight: 700;
+            color: #d63031;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .hook-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #2d3436;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+        
+        .copy-btn {
+            background: white;
+            color: #f5576c;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: auto;
+        }
+        
+        .copy-btn:hover {
+            background: #f5576c;
+            color: white;
+        }
+        
+        .info-badge {
+            display: inline-block;
+            background: #dfe6e9;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 8px;
+            color: #636e72;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Hook Generator</h1>
+            <p>Create viral hooks that make people STOP scrolling</p>
+        </div>
+        
+        <div class="content">
+            <form id="hookForm">
+                <div class="form-group">
+                    <label for="topic">What's your content about? *</label>
+                    <input 
+                        type="text" 
+                        id="topic" 
+                        placeholder="e.g., Making money online, Fitness tips, Productivity hacks"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="platform">Platform *</label>
+                    <select id="platform" required>
+                        <option value="">Select platform...</option>
+                        <option value="tiktok">TikTok</option>
+                        <option value="reels">Instagram Reels</option>
+                        <option value="shorts">YouTube Shorts</option>
+                        <option value="all">All Platforms</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="angle">Content Angle *</label>
+                    <select id="angle" required>
+                        <option value="">Select angle...</option>
+                        <option value="shocking">Shocking/Surprising</option>
+                        <option value="controversial">Controversial</option>
+                        <option value="mistake">Common Mistake</option>
+                        <option value="secret">Secret/Hidden Info</option>
+                        <option value="transformation">Transformation</option>
+                        <option value="question">Intriguing Question</option>
+                    </select>
+                </div>
+                
+                <button type="submit">Generate Viral Hooks ⚡</button>
+            </form>
+            
+            <div id="hooksContainer" class="hooks-container">
+                <h2 style="margin-bottom: 20px; color: #2d3436;">Your Viral Hooks:</h2>
+                <div id="hooksList"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const hookTemplates = {
+            shocking: [
+                "Wait, NOBODY is talking about [TOPIC]...",
+                "This [TOPIC] secret will blow your mind",
+                "I can't believe [TOPIC] actually works like this",
+                "The TRUTH about [TOPIC] that nobody tells you",
+                "[TOPIC] is NOT what you think it is..."
+            ],
+            controversial: [
+                "Hot take: [TOPIC] is completely overrated",
+                "Unpopular opinion about [TOPIC]...",
+                "Everyone is WRONG about [TOPIC]",
+                "I'm going to get canceled for saying this about [TOPIC]...",
+                "Stop doing [TOPIC] this way (here's why)"
+            ],
+            mistake: [
+                "You're doing [TOPIC] wrong (and here's why)",
+                "The #1 [TOPIC] mistake that's costing you everything",
+                "Stop! You're ruining your [TOPIC] by doing this",
+                "Why your [TOPIC] isn't working (it's not your fault)",
+                "I wasted 5 years on [TOPIC] until I learned this"
+            ],
+            secret: [
+                "The [TOPIC] secret that millionaires don't want you to know",
+                "What nobody tells you about [TOPIC]...",
+                "I discovered this [TOPIC] hack by accident",
+                "The hidden [TOPIC] method that changed everything",
+                "This [TOPIC] trick is so simple it feels illegal"
+            ],
+            transformation: [
+                "I went from $0 to [RESULT] with [TOPIC]",
+                "[TOPIC] changed my life in 30 days (here's how)",
+                "Before vs After: My [TOPIC] transformation",
+                "How [TOPIC] took me from broke to thriving",
+                "The [TOPIC] journey nobody shows you"
+            ],
+            question: [
+                "What if I told you [TOPIC] doesn't work?",
+                "Why does nobody talk about [TOPIC] anymore?",
+                "Is [TOPIC] even worth it in 2026?",
+                "How is [TOPIC] even legal?",
+                "Why are experts hiding this [TOPIC] info?"
+            ]
+        };
+        
+        const psychTriggers = {
+            shocking: "Uses surprise & pattern interruption",
+            controversial: "Leverages controversy & social proof",
+            mistake: "Taps into fear of missing out & loss aversion",
+            secret: "Uses exclusivity & insider knowledge",
+            transformation: "Shows social proof & aspirational results",
+            question: "Creates curiosity gap & engages viewer"
+        };
+        
+        document.getElementById('hookForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const topic = document.getElementById('topic').value;
+            const platform = document.getElementById('platform').value;
+            const angle = document.getElementById('angle').value;
+            
+            const hooksContainer = document.getElementById('hooksContainer');
+            const hooksList = document.getElementById('hooksList');
+            
+            hooksList.innerHTML = '';
+            
+            const templates = hookTemplates[angle];
+            
+            templates.forEach((template, index) => {
+                const hook = template.replace('[TOPIC]', topic).replace('[RESULT]', 'success');
+                
+                const card = document.createElement('div');
+                card.className = 'hook-card';
+                card.innerHTML = `
+                    <div class="hook-type">Hook ${index + 1}: ${angle.toUpperCase()}</div>
+                    <div class="hook-text">${hook}</div>
+                    <button class="copy-btn" onclick="copyHook(this, '${hook.replace(/'/g, "\\'")}')">Copy Hook</button>
+                    <div class="info-badge">🧠 ${psychTriggers[angle]}</div>
+                `;
+                hooksList.appendChild(card);
+            });
+            
+            hooksContainer.classList.add('show');
+            setTimeout(() => {
+                hooksContainer.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        });
+        
+        function copyHook(btn, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                btn.style.background = '#00b894';
+                btn.style.color = 'white';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
